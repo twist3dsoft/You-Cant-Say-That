@@ -97,7 +97,7 @@ public class Settings {
 				in.close();
 				br.close(); 
 			}catch (Exception e){ 
-				// Handle
+				System.err.println("ERROR: " + e.getMessage());
 			}
 		
 			if(useTimeStamp){
@@ -118,10 +118,10 @@ public class Settings {
 					writer.newLine();
 				}
 			} catch (IOException e) {
-				// Handle
+				System.err.println("ERROR: " + e.getMessage());
 			} finally {
 				try {writer.close();} catch (Exception e) { 
-					// Handle
+					System.err.println("ERROR: " + e.getMessage());
 				}
 			}
 			tempFileData.clear();
@@ -144,7 +144,8 @@ public class Settings {
 			System.out.println("2 ) [" + staticReplacement + "] Set Static Replacement");
 			System.out.println("3 ) Wipe ALL banned words");
 			System.out.println("4 ) [" + enableLogging + "] Toggle Logging");
-			System.out.println("5 ) Back");
+			System.out.println("5 ) Restore Default Settings");
+			System.out.println("6 ) Back");
 			
 			while(!SettingsMenuSelected){
 				System.out.print("\nEnter the number of your choice: ");
@@ -186,8 +187,12 @@ public class Settings {
 						System.out.println("Logging setting has been toggled.!");
 						break;
 					case 5:
+						resetSettings();
+						writeLog("Default settings have been restored!");
+						break;
+					case 6:
 						exitSettings = true;
-						writeLog("exit settings set to true");
+						writeLog("Exit settings set to true!");
 						break;
 					default:
 						System.out.println("You entered " + SettingsMenuSelection + ". " + SettingsMenuSelection + " is not a valid choice.");
@@ -197,6 +202,7 @@ public class Settings {
 			} catch(Exception e) {
 				writeLog("Error: " + e.getMessage());
 			}
+			input.close();
 			SettingsMenuSelected = false;
 			SettingsMenuSelection = 0;
 		}
@@ -344,5 +350,14 @@ public class Settings {
 		} else {
 			enableLogging = true;
 		}
+	}
+	
+	/**
+	 * Restores the default settings
+	 */
+	public static void resetSettings(){
+		uniqueReplacements = true;
+		staticReplacement = "{REDACTED}";
+		enableLogging = true;
 	}
 }
