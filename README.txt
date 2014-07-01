@@ -8,8 +8,6 @@ Removes "banned words" from a text document provided. Has the ability to add/rem
 
 //TODO 
 // - Rehandle exceptions in Settings.writeLog. writeLog() can't be //called inside of writeLog() doing so will cause a stackoverflow.
-// - Add a restore default settings option
-// - Actually overwrite the original text file. In the middle of //switching from overwriting the data in an array to the entire file.
 //- Handle banned words as root word and with punctuation.
 //- Add a GUI version
 

@@ -4,7 +4,7 @@
  * Author: By Carl Sparks (TWiST3DSOFT)
  * Email: mail@carldsparks.com
  * Skype: nagantarov
- * Last Update: May 18, 2014 (2:57AM EST)
+ * Last Update: June 30, 2014 (8:45PM EST)
  * Source available at: http://github.com/twist3dsoft
  * License: GPLv3
  * Copyright: 2014
@@ -48,7 +48,7 @@ import java.util.Scanner;
 /**
  * The main class for "You Can't Say That!"
  * @author TWiST3DSOFT
- * @version 1.0 Build 1 5/15/2014
+ * @version 1.0
  * 
  */
 public class Censor {
@@ -61,7 +61,7 @@ public class Censor {
 	private static boolean exitApp = false;
 	private static boolean menuSelectionEntered = false;
 	private static int MenuSelection = 0;
-	private static ArrayList<BannedWord> BannedWordsList = new ArrayList();
+	private static ArrayList<BannedWord> BannedWordsList = new ArrayList<BannedWord>();
 	private static String[] vars;
 	
 	public static void main(String[] args) {
@@ -96,7 +96,7 @@ public class Censor {
 							menuSelectionEntered = true;
 						} else {
 							System.out.println("What you entered is not a number!");
-							input.next();
+							input.nextLine();
 							continue;
 						}
 						Settings.writeLog(MenuSelection + " entered as main menu selection");
@@ -202,15 +202,18 @@ public class Censor {
 			// Read from the file one line at a time
 			while((lineFromFile = br.readLine()) != null){
 				vars = lineFromFile.split(" "); // Parse the line into multiple Strings using space as the delimiter
+				
 				for(int x = 0; x <= vars.length - 1; x++){
 					
 					if(isBanned(vars[x], x)){
-						Settings.writeLog("Checking if " + vars[x] + " is a banned word");
 						// Add to the counter
 						BannedWordCounter++;
 					}
-					tempString = tempString + " " + vars[x];
-					//System.out.print(vars[x] + " ");
+					if(tempString == null){
+						tempString = vars[x]; 
+					} else {
+						tempString += " " + vars[x];
+					}
 				}
 				tempFileData.add(tempString);
 			}
@@ -220,6 +223,7 @@ public class Censor {
 			br.close();
 		}catch (Exception e){ // If there was an error processing the file or its data output the error to the user
 			Settings.writeLog("ERROR: " + e.getMessage());
+			
 		}
 		
 		Settings.writeLog("tempFileData size: " + tempFileData.size());
@@ -230,11 +234,9 @@ public class Censor {
 					new FileOutputStream(filePath), "utf-8"));
 			// Loop through each "line" of the log List and write it to file
 			for(int x = 0; x <= tempFileData.size() - 1; x++){
-				System.out.println("tempFileData " + x + ": " + tempFileData.get(x) );
-				/*
+				System.out.println("Line Number " + x + ": " + tempFileData.get(x) );
 				writer.write(tempFileData.get(x)); 
 				writer.newLine();
-			   */
 			}
 		} catch (IOException e) {
 			Settings.writeLog("Error: " + e.getMessage());
@@ -255,6 +257,7 @@ public class Censor {
 			System.out.println("\n\nCensor complete! No words have been censored.\n");
 			Settings.writeLog("\n\nCensor complete! No words have been censored.\n");
 		}
+		tempFileData.clear();
 		textInput.close();
 	}
 	
@@ -269,7 +272,8 @@ public class Censor {
 		boolean bannedWordFound = false;
 		
 		for(int x = 0; x <= BannedWordsList.size() - 1; x++){
-			if(BannedWordsList.get(x).toString().equalsIgnoreCase(word)){
+			Settings.writeLog("Checking if " + vars[wordID] + " is a banned word");
+			if(BannedWordsList.get(x).getBannedString().equalsIgnoreCase(word)){
 				Settings.writeLog(vars[wordID] + " is banned");
 				
 				if(Settings.getReplacementSetting()){
@@ -409,6 +413,7 @@ public class Censor {
 			br.close(); 
 		}catch (Exception e){ 
 			Settings.writeLog("Error: " + e.getMessage());
+			saveBannedWords();
 		}
 	}
 	
@@ -428,6 +433,7 @@ public class Censor {
 					writer.write(BannedWordsList.get(x).getBannedString() + "-" + BannedWordsList.get(x).getReplacement()); 
 					writer.newLine();
 			}
+			Settings.writeLog("Banned words saved to file!");
 		} catch (IOException e) {
 			Settings.writeLog("Error: " + e.getMessage());
 		} finally {
