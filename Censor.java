@@ -4,7 +4,7 @@
  * Author: By Carl Sparks (TWiST3DSOFT)
  * Email: mail@carldsparks.com
  * Skype: nagantarov
- * Last Update: June 30, 2014 (8:45PM EST)
+ * Last Update: May 18, 2014 (2:57AM EST)
  * Source available at: http://github.com/twist3dsoft
  * License: GPLv3
  * Copyright: 2014
@@ -48,7 +48,7 @@ import java.util.Scanner;
 /**
  * The main class for "You Can't Say That!"
  * @author TWiST3DSOFT
- * @version 1.0
+ * @version 1.0 Build 1 5/15/2014
  * 
  */
 public class Censor {
@@ -59,106 +59,98 @@ public class Censor {
 
 	private static Scanner input = new Scanner(System.in);
 	private static boolean exitApp = false;
-	private static boolean menuSelectionEntered = false;
 	private static int MenuSelection = 0;
 	private static ArrayList<BannedWord> BannedWordsList = new ArrayList<BannedWord>();
 	private static String[] vars;
 	
 	public static void main(String[] args) {
-				Settings.writeLog("You can't Say That initiated...");
+		Settings.writeLog("You can't Say That initiated...");
 		
-				// Introduction
-				System.out.println("*************************************");
-				System.out.println("* " + title);
-				System.out.println("* " + author);
-				System.out.println("* " + srclink);
-				System.out.println("* " + license);
-				System.out.println("*************************************\n");
+		// Introduction
+		System.out.println("*************************************");
+		System.out.println("* " + title);
+		System.out.println("* " + author);
+		System.out.println("* " + srclink);
+		System.out.println("* " + license);
+		System.out.println("*************************************\n");
 				
-				//Initialize
-				init();
+		//Initialize
+		init();
 
-				while(!exitApp){
-					System.out.println("Main Menu");
-					System.out.println("1 ) Censor a Document");
-					System.out.println("2 ) View Banned Words");
-					System.out.println("3 ) Add Banned Words");
-					System.out.println("4 ) Remove Banned Words");
-					System.out.println("5 ) Settings"); 
-					System.out.println("6 ) About");
-					System.out.println("7 ) Exit");
+		while(!exitApp){
+			System.out.println("Main Menu");
+			System.out.println("1 ) Censor a Document");
+			System.out.println("2 ) View Banned Words");
+			System.out.println("3 ) Add Banned Words");
+			System.out.println("4 ) Remove Banned Words");
+			System.out.println("5 ) Settings"); 
+			System.out.println("6 ) About");
+			System.out.println("7 ) Exit");
 					
-					while(!menuSelectionEntered){
-						System.out.print("\nEnter the number of your choice: ");
-						// Capture an integer from the user using Scanner. If we do not get an integer loop through again.
-						if(input.hasNextInt()){
-							MenuSelection = input.nextInt();
-							menuSelectionEntered = true;
-						} else {
-							System.out.println("What you entered is not a number!");
-							input.nextLine();
-							continue;
-						}
-						Settings.writeLog(MenuSelection + " entered as main menu selection");
-					}
+			System.out.print("\nEnter the number of your choice: ");
+			// Capture an integer from the user using Scanner. If we do not get an integer loop through again.
+			try{
+				MenuSelection = input.nextInt();
+				Settings.writeLog(MenuSelection + " entered as main menu selection");
+				input = new Scanner(System.in);
+			} catch (Exception e) {
+				System.out.println("What you entered is not a number!");
+				Settings.writeLog("ERROR: " + e);
+				input = new Scanner(System.in);
+			}
 					
-					try{
-						switch(MenuSelection){
-							case 1:
-								System.out.println("-------------------------------------");
-								censor();
-								Settings.writeLog("running censor method");
-								System.out.println("-------------------------------------\n");
-								break;
-							case 2:
-								System.out.println("-------------------------------------");
-								displayBannedWords();
-								Settings.writeLog("running display banned words method");
-								System.out.println("-------------------------------------\n");
-								break;
-							case 3:
-								System.out.println("-------------------------------------");
-								addBannedWord();
-								saveBannedWords();
-								Settings.writeLog("running add banned word method");
-								System.out.println("-------------------------------------\n");
-								break;
-							case 4:
-								System.out.println("-------------------------------------");
-								deleteBannedWord();
-								saveBannedWords();
-								Settings.writeLog("running delete banned word method");
-								System.out.println("-------------------------------------\n");
-								break;
-							case 5:
-								System.out.println("-------------------------------------");
-								Settings.displaySettings();
-								Settings.writeLog("running display settings method");
-								System.out.println("-------------------------------------\n");
-								break;
-							case 6:
-								System.out.println("-------------------------------------");
-								about();
-								Settings.writeLog("running about method");
-								System.out.println("-------------------------------------\n");
-								break;
-							case 7:
-								exitApp = true;
-								Settings.writeLog("exit app set true");
-								break;
-							default:
-								System.out.println("You entered " + MenuSelection + ". " + MenuSelection + " is not a valid choice.");
-								Settings.writeLog("invalid menu selection entered: " + MenuSelection);
-								break;
-						}
-					} catch(Exception e) {
-						Settings.writeLog("Error: " + e.getMessage());
-					}
-					MenuSelection = 0; // Reset the menu selection so we can loop through it again
-					menuSelectionEntered = false; // Tell the program that the user has not entered anything for a menu selection
+			switch(MenuSelection){
+				case 1:
+					System.out.println("-------------------------------------");
+					censor();
+					Settings.writeLog("running censor method");
+					System.out.println("-------------------------------------\n");
+					break;
+				case 2:
+					System.out.println("-------------------------------------");
+					displayBannedWords();
+					Settings.writeLog("running display banned words method");
+					System.out.println("-------------------------------------\n");
+					break;
+				case 3:
+					System.out.println("-------------------------------------");
+					addBannedWord();
+					saveBannedWords();
+					Settings.writeLog("running add banned word method");
+					System.out.println("-------------------------------------\n");
+					break;
+				case 4:
+					System.out.println("-------------------------------------");
+					deleteBannedWord();
+					saveBannedWords();
+					Settings.writeLog("running delete banned word method");
+					System.out.println("-------------------------------------\n");
+					break;
+				case 5:
+					System.out.println("-------------------------------------");
+					Settings.displaySettings();
+					Settings.writeLog("running display settings method");
+					System.out.println("-------------------------------------\n");
+					break;
+				case 6:
+					System.out.println("-------------------------------------");
+					about();
+					Settings.writeLog("running about method");
+					System.out.println("-------------------------------------\n");
+					break;
+				case 7:
+					exitApp = true;
+					Settings.writeLog("exit app set true");
+					break;
+				default:
+					System.out.println("You entered " + MenuSelection + ". " + MenuSelection + " is not a valid choice.");
+					Settings.writeLog("invalid menu selection entered: " + MenuSelection);
+					break;
 				}
-				input.close();
-	}
+				MenuSelection = 0; // Reset the menu selection so we can loop through it again
+		}
+		input.close();
+}
 	
 	/**
 	 * Loads essential settings from local files to program variables.
@@ -183,14 +175,13 @@ public class Censor {
 	private static void censor(){
 		List<String> tempFileData = new ArrayList<String>(); // Stores the file content for the log before it gets written to file
 		BufferedWriter writer = null;
-		Scanner textInput = new Scanner(System.in);
 		String filePath = null;
 		String lineFromFile = null;
 		String tempString = null;
 		int BannedWordCounter = 0;
 		
 		System.out.print("Enter the file path to the text file(if in the same directory just enter 'filename'.txt: ");
-		filePath = textInput.nextLine(); // Catch the file path provided by the user
+		filePath = input.nextLine(); // Catch the file path provided by the user
 		System.out.println(""); // Used to add a space after the Scanner; This feels so dirty.
 		
 		Settings.writeLog("attempting to open file " + filePath + "...");
@@ -258,7 +249,6 @@ public class Censor {
 			Settings.writeLog("\n\nCensor complete! No words have been censored.\n");
 		}
 		tempFileData.clear();
-		textInput.close();
 	}
 	
 	/**
@@ -441,5 +431,9 @@ public class Censor {
 				Settings.writeLog("Error: " + e.getMessage()); 
 			}
 		}
+	}
+	
+	public static Scanner getScanner(){
+		return input;
 	}
 }

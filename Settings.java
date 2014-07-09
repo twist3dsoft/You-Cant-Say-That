@@ -37,7 +37,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Contains all the settings needed for "You Can't Say That!" along with the methods necessary to manipulate settings data. 
@@ -56,7 +55,7 @@ public class Settings {
 	private static boolean uniqueReplacements = true;
 	private static String staticReplacement = "{REDACTED}";
 	private static boolean enableLogging = true;
-	
+
 	
 	/**
 	 * Writes a String to a log file with a time stamp prepended.
@@ -132,7 +131,6 @@ public class Settings {
 	 * Handles the display and routing of the settings menu. 
 	 */
 	public static void displaySettings(){
-		Scanner input = new Scanner(System.in);
 		String inputText = null;
 		boolean exitSettings = false;
 		boolean SettingsMenuSelected = false;
@@ -150,12 +148,12 @@ public class Settings {
 			while(!SettingsMenuSelected){
 				System.out.print("\nEnter the number of your choice: ");
 				// Capture an integer from the user using Scanner. If we do not get an integer loop through again.
-				if(input.hasNextInt()){
-					SettingsMenuSelection = input.nextInt();
+				if(Censor.getScanner().hasNextInt()){
+					SettingsMenuSelection = Censor.getScanner().nextInt();
 					SettingsMenuSelected = true;
 				} else {
 					System.out.println("What you entered is not a number!");
-					input.next();
+					Censor.getScanner().next();
 					continue;
 				}
 			}
@@ -170,7 +168,7 @@ public class Settings {
 						break;
 					case 2:
 						System.out.print("Enter the static replacement for banned words: ");
-						inputText = input.next();
+						inputText = Censor.getScanner().next();
 						setReplacement(inputText);
 						saveSettings();
 						writeLog("Static replacement changed to " + inputText);
@@ -202,7 +200,6 @@ public class Settings {
 			} catch(Exception e) {
 				writeLog("Error: " + e.getMessage());
 			}
-			input.close();
 			SettingsMenuSelected = false;
 			SettingsMenuSelection = 0;
 		}
@@ -225,6 +222,8 @@ public class Settings {
 			writer.write("staticReplacement=" + staticReplacement);
 			writer.newLine();
 			writer.write("enableLogging=" + enableLogging);
+			
+			writeLog("Settings saved to file!");
 			
 		} catch (IOException e) {
 			writeLog("Error: " + e.getMessage());
@@ -263,6 +262,7 @@ public class Settings {
 					br.close(); 
 				}catch (Exception e){ 
 					writeLog("Error: " + e.getMessage());
+					saveSettings();
 				}
 	}
 	
