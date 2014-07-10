@@ -4,7 +4,7 @@
  * Author: By Carl Sparks (TWiST3DSOFT)
  * Email: mail@carldsparks.com
  * Skype: nagantarov
- * Last Update: May 18, 2014 (2:57AM EST)
+ * Last Update: July 8, 2014
  * Source available at: http://github.com/twist3dsoft
  * License: GPLv3
  * Copyright: 2014
@@ -39,8 +39,6 @@ import java.util.Scanner;
 
 /*
  * TODO CHECKLIST
- * - Actually overwrite the original text file. In the middle of 
- *   switching from overwriting the data in an array to the entire file.
  * - Handle banned words as root word and with punctuation.
  * - Add a GUI version
  */
@@ -158,12 +156,6 @@ public class Censor {
 	private static void init(){	
 		// Create a banned word and add it to the list of banned words
 		// This is just dummy banned word for now
-		/*
-		BannedWord fake = new BannedWord();
-		fake.setBannedString("Bad");
-		fake.setReplacement("good");
-		BannedWordsList.add(fake);
-		*/
 		
 		loadBannedWords();
 		Settings.loadSettings();
@@ -263,16 +255,25 @@ public class Censor {
 		
 		for(int x = 0; x <= BannedWordsList.size() - 1; x++){
 			Settings.writeLog("Checking if " + vars[wordID] + " is a banned word");
-			if(BannedWordsList.get(x).getBannedString().equalsIgnoreCase(word)){
-				Settings.writeLog(vars[wordID] + " is banned");
+			// Check to see if the banned word is a substring
+			if(word.contains(BannedWordsList.get(x).getBannedString().toLowerCase())){
+				/* 
+				 * If the banned word is a substring make sure that it's due to punctuation and not simply a root word
+				 * Example - When checking for the word "hell"
+				 * FIX: "hell." 
+				 * DON'T FIX: "hello"
+				 */
+				if(word.toLowerCase().contains(".") || word.toLowerCase().contains("!") || word.toLowerCase().contains("?") || word.toLowerCase().contains("\"") || word.toLowerCase().contains(",")){
+					Settings.writeLog(vars[wordID] + " is banned");
 				
-				if(Settings.getReplacementSetting()){
-					vars[wordID] = getBannedWord(x).getReplacement();
-				} else {
-					vars[wordID] = Settings.getReplacement();
+					if(Settings.getReplacementSetting()){
+						vars[wordID] = getBannedWord(x).getReplacement();
+					} else {
+						vars[wordID] = Settings.getReplacement();
+					}
+				
+					bannedWordFound = true;
 				}
-				
-				bannedWordFound = true;
 			}
 		}
 		
