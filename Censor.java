@@ -4,7 +4,7 @@
  * Author: By Carl Sparks (TWiST3DSOFT)
  * Email: mail@carldsparks.com
  * Skype: nagantarov
- * Last Update: July 8, 2014
+ * Last Update: July 10, 2014
  * Source available at: http://github.com/twist3dsoft
  * License: GPLv3
  * Copyright: 2014
@@ -39,7 +39,6 @@ import java.util.Scanner;
 
 /*
  * TODO CHECKLIST
- * - Handle banned words as root word and with punctuation.
  * - Add a GUI version
  */
 
