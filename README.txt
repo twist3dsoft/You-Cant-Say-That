@@ -7,7 +7,6 @@ License: GPLv3
 Removes "banned words" from a text document provided. Has the ability to add/remove/view banned words. Settings and banned words are saved to a local file to allow persistent access. Basic date and time formatted logs can be created to help debug the program.
 
 //TODO 
-//- Handle banned words as root word and with punctuation.
 //- Add a GUI version
 
 Unique Replacements
